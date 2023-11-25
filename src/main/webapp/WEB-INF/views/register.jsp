@@ -1,5 +1,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page isELIgnored="false" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -10,14 +11,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
-    <link rel="stylesheet" href="<c:url value="/css/style.css"/>" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css" />
   </head>
   <body>
     <header>
       <nav class="container container--70">
         <ul class="nav--actions">
-          <li><a href="#">Zaloguj</a></li>
-          <li class="highlighted"><a href="#">Załóż konto</a></li>
+          <li><a href="${pageContext.request.contextPath}/login">Zaloguj</a></li>
+          <li class="highlighted"><a href="${pageContext.request.contextPath}/register">Załóż konto</a></li>
         </ul>
 
         <ul>
@@ -32,60 +33,28 @@
 
     <section class="login-page">
       <h2>Załóż konto</h2>
-      <form>
+      <form:form method="post" modelAttribute="userDTO">
         <div class="form-group">
-          <input type="text" name="name" placeholder="Imię" />
+          <form:input type="text" path="name" placeholder="Imię"/>
         </div>
         <div class="form-group">
-          <input type="text" name="surname" placeholder="Nazwisko" />
+          <form:input type="text" path="surname" placeholder="Nazwisko"/>
         </div>
         <div class="form-group">
-          <input type="email" name="email" placeholder="Email" />
+          <form:input type="email" path="username" placeholder="Email"/>
         </div>
         <div class="form-group">
-          <input type="password" name="password" placeholder="Hasło" />
+          <form:input type="password" path="password" placeholder="Hasło"/>
         </div>
         <div class="form-group form-group--buttons">
-          <a href="login.jsp" class="btn btn--without-border">Zaloguj się</a>
-          <button class="btn" type="submit">Załóż konto</button>
+          <form:button type="submit" class="btn">Załóż konto</form:button>
+          <a href="${pageContext.request.contextPath}/login" class="btn btn--without-border">Zaloguj się</a>
         </div>
-      </form>
+        <sec:csrfInput/>
+      </form:form>
     </section>
-
-    <footer>
-      <div class="contact">
-        <h2>Skontaktuj się z nami</h2>
-        <h3>Formularz kontaktowy</h3>
-        <form>
-          <div class="form-group form-group--50">
-            <input type="text" name="name" placeholder="Imię" />
-          </div>
-          <div class="form-group form-group--50">
-            <input type="text" name="surname" placeholder="Nazwisko" />
-          </div>
-
-          <div class="form-group">
-            <textarea
-              name="message"
-              placeholder="Wiadomość"
-              rows="1"
-            ></textarea>
-          </div>
-
-          <button class="btn" type="submit">Wyślij</button>
-        </form>
-      </div>
-      <div class="bottom-line">
-        <span class="bottom-line--copy">Copyright &copy; 2018</span>
-        <div class="bottom-line--icons">
-          <a href="#" class="btn btn--small"
-            ><img src="images/icon-facebook.svg"
-          /></a>
-          <a href="#" class="btn btn--small"
-            ><img src="images/icon-instagram.svg"
-          /></a>
-        </div>
-      </div>
-    </footer>
+    <!-- Footer-->
+    <jsp:include page="footer.jsp"/>
+    <!-- Footer-->
   </body>
 </html>

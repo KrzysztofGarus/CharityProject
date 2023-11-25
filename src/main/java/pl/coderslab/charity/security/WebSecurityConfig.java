@@ -36,17 +36,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/resources/**").permitAll()
-                .antMatchers("/register").permitAll()
                 .antMatchers("/user/**").hasRole("USER")
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
                 .and()
                 .formLogin()
-                .loginPage("/login").permitAll()
+                .loginPage("/login")
                 .successHandler((request, response, authentication) -> {
                     if (AuthorityAuthorizationManager.hasRole("ADMIN").check(() -> authentication, null).isGranted()) {
                         response.sendRedirect("/admin/dashboard");
@@ -54,6 +51,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         response.sendRedirect("/user/dashboard");
                     }
                 })
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
                 .and()
                 .csrf()
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
